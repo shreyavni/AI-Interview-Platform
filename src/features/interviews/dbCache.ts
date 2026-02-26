@@ -1,26 +1,26 @@
-import { getGlobalTag, getIdTag, getJobInfoTag } from "@/lib/dataCache"
-import { revalidateTag } from "next/cache"
+import { getGlobalTag, getIdTag, getJobInfoTag } from "@/lib/dataCache";
+import { revalidateTag } from "next/cache";
 
 export function getInterviewGlobalTag() {
-  return getGlobalTag("interviews")
+  return getGlobalTag("interviews");
 }
 
 export function getInterviewJobInfoTag(jobInfoId: string) {
-  return getJobInfoTag("interviews", jobInfoId)
+  return getJobInfoTag("interviews", jobInfoId);
 }
 
 export function getInterviewIdTag(id: string) {
-  return getIdTag("interviews", id)
+  return getIdTag("interviews", id);
 }
 
 export function revalidateInterviewCache({
   id,
   jobInfoId,
 }: {
-  id: string
-  jobInfoId: string
+  id: string;
+  jobInfoId: string;
 }) {
-  revalidateTag(getInterviewGlobalTag())
-  revalidateTag(getInterviewJobInfoTag(jobInfoId))
-  revalidateTag(getInterviewIdTag(id))
+  revalidateTag(getInterviewGlobalTag(), {});
+  revalidateTag(getInterviewJobInfoTag(jobInfoId), {});
+  revalidateTag(getInterviewIdTag(id), {});
 }
