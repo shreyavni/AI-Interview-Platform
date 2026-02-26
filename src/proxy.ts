@@ -1,9 +1,17 @@
 import arcjet, { detectBot, shield, slidingWindow } from "@arcjet/next";
 import { clerkMiddleware, createRouteMatcher } from "@clerk/nextjs/server";
+import { env } from "./data/env/server";
 
-const isPublicRoute = createRouteMatcher(["/sign-in(.*)", "/"]);
+const isPublicRoute = createRouteMatcher([
+  "/sign-in(.*)",
+  "/",
+  "/api/webhooks(.*)",
+]);
+
+const isWebhook = createRouteMatcher(["/api/webhooks(.*)"]);
+
 const aj = arcjet({
-  key: process.env.ARCJET_KEY!,
+  key: env.ARCJET_KEY,
   rules: [
     shield({ mode: "LIVE" }),
     detectBot({
@@ -19,12 +27,18 @@ const aj = arcjet({
 });
 
 export default clerkMiddleware(async (auth, req) => {
-  const decision = await aj.protect(req);
+  // Skip Arcjet for webhooks - they need raw request body for signature verification
+  if (!isWebhook(req)) {
+    const decision = await aj.protect(req);
 
-  if (decision.isDenied()) {
-    return new Response(null, { status: 403 });
+    if (decision.isDenied()) {
+      return new Response(null, { status: 403 });
+    }
   }
-  if (!isPublicRoute(req)) await auth.protect();
+
+  if (!isPublicRoute(req)) {
+    await auth.protect();
+  }
 });
 
 export const config = {
