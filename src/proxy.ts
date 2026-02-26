@@ -27,6 +27,16 @@ const aj = arcjet({
 });
 
 export default clerkMiddleware(async (auth, req) => {
+  // Handle forwarded headers for dev tunnel
+  const headers = new Headers(req.headers);
+
+  // If we have x-forwarded-host, ensure x-forwarded-proto is set
+  if (headers.has("x-forwarded-host")) {
+    if (!headers.has("x-forwarded-proto")) {
+      headers.set("x-forwarded-proto", "https");
+    }
+  }
+
   // Skip Arcjet for webhooks - they need raw request body for signature verification
   if (!isWebhook(req)) {
     const decision = await aj.protect(req);

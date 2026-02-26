@@ -17,6 +17,24 @@ export function OnboardingClient({ userId }: { userId: string }) {
     let timeoutId: ReturnType<typeof setTimeout>;
     let startTime = Date.now();
 
+    const initializeUser = async () => {
+      try {
+        // First, trigger user creation via API
+        const response = await fetch("/api/onboarding", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+        });
+
+        if (!response.ok) {
+          throw new Error("Failed to initialize user");
+        }
+
+        console.log("User initialized, starting verification...");
+      } catch (err) {
+        console.error("Error initializing user:", err);
+      }
+    };
+
     const checkUser = async () => {
       try {
         const user = await getUser(userId);
@@ -56,7 +74,10 @@ export function OnboardingClient({ userId }: { userId: string }) {
       }
     };
 
-    checkUser();
+    // Initialize user first, then start checking
+    initializeUser().then(() => {
+      if (isMounted) checkUser();
+    });
 
     return () => {
       isMounted = false;
