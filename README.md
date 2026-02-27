@@ -1,36 +1,107 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# 🎙️ InterviewPrep: AI-Powered Career Intelligence
 
-## Getting Started
+InterviewPrep is a professional-grade mock interview platform that leverages **Empathic Voice AI** and **Large Language Models** to simulate real-world technical interviews. It provides a full-circle preparation suite—from resume analysis to live voice interaction.
 
-First, run the development server:
+---
 
+## 🚀 Key Features
+
+* **🗣️ Realistic Voice Interviews**: Powered by **Hume AI (EVC)**, featuring low-latency, empathic vocal interactions that go beyond simple text-to-speech.
+* **📄 AI Resume Analysis**: Deep-scan resumes to identify skill gaps and alignment with specific Job Descriptions using **Gemini AI**.
+* **🧠 Dynamic Question Generation**: Automatically generates technical questions based on JD difficulty, role requirements, and user experience level.
+* **🛡️ Enterprise-Grade Security**: Integrated **Arcjet** for bot protection, rate limiting, and shield security, alongside **Clerk** for robust authentication.
+* **📊 Database & Persistence**: Utilizes **PostgreSQL** with **Drizzle ORM** for type-safe data management and efficient caching.
+* **🐳 Containerized Environment**: Fully **Dockerized** setup to ensure consistency across development and production environments.
+
+---
+
+## 🛠️ Technical Stack
+
+| Category | Technology |
+| :--- | :--- |
+| **Framework** | Next.js 15 (App Router) |
+| **Styling** | Tailwind CSS + Shadcn UI |
+| **AI/ML** | Hume AI (Voice), Google Gemini (LLM) |
+| **Database** | PostgreSQL + Drizzle ORM |
+| **Auth/Security** | Clerk Auth + Arcjet |
+| **Infrastructure** | Docker, Vercel |
+
+---
+
+## 📦 Getting Started
+
+### 1. Prerequisites
+* Docker Desktop installed
+* Node.js 20+
+* API Keys for: Clerk, Hume AI, Arcjet, and Google Gemini.
+
+### 2. Installation
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+# Clone the repository
+git clone [https://github.com/shreyavni/AI-Interview-Platform.git](https://github.com/shreyavni/AI-Interview-Platform.git)
+cd AI-Interview-Platform
+
+# Install dependencies
+npm install
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+### 3. Environment Setup
+Create a .env.local file in the root directory and add your credentials:
+```bash
+# Clerk Authentication
+NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY=your_clerk_publishable_key
+CLERK_SECRET_KEY=your_clerk_secret_key
+CLERK_WEBHOOK_SECRET=your_clerk_webhook_secret
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+# Clerk Redirects
+NEXT_PUBLIC_CLERK_SIGN_IN_URL=/sign-in
+NEXT_PUBLIC_CLERK_SIGN_IN_FALLBACK_REDIRECT_URL=/app
+NEXT_PUBLIC_CLERK_SIGN_UP_FORCE_REDIRECT_URL=/onboarding
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+# Arcjet Security
+ARCJET_KEY=your_arcjet_key
 
-## Learn More
+# Database Configuration (PostgreSQL)
+DB_USER=your_db_user
+DB_PASSWORD=your_db_password
+DB_HOST=your_db_host
+DB_PORT=5432
+DB_NAME=your_db_name
 
-To learn more about Next.js, take a look at the following resources:
+# Drizzle Database URL (Constructed from above)
+DATABASE_URL=postgresql://your_db_user:your_db_password@your_db_host:5432/your_db_name
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+# Hume AI (Voice)
+HUME_API_KEY=your_hume_api_key
+HUME_SECRET_KEY=your_hume_secret_key
+NEXT_PUBLIC_HUME_CONFID_ID=your_hume_config_id
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+# Google Gemini AI
+GEMINI_API_KEY=your_gemini_api_key
+```
 
-## Deploy on Vercel
+### 4. Run the Project
+```bash
+# Start PostgreSQL via Docker
+docker-compose up -d
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+# Run migrations to setup database schema
+npx drizzle-kit push
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+# Start development server
+npm run dev
+```
+
+---
+
+## 🛡️ Security Guardrails
+
+The application implements Arcjet to protect sensitive AI routes and ensure platform stability:
+
+* **Bot Attacks**: Prevents automated scripts from consuming expensive AI credits.
+* **Rate Limiting**: Custom token bucket algorithms to ensure fair usage of Gemini and Hume APIs.
+* **Type Safety**: Leveraging Drizzle ORM to prevent SQL injection and ensure data integrity
+
+---
+
+### ***Built with ❤️ by Avni Shukla***
