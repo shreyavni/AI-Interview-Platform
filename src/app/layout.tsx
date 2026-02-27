@@ -8,6 +8,7 @@ import { Toaster } from "@/components/ui/sonner";
 const outfitSans = Outfit({
   variable: "--font-outfit-sans",
   subsets: ["latin"],
+  display: "swap", // Prevents font rendering delay
 });
 
 export const metadata: Metadata = {
